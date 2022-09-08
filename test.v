@@ -17,4 +17,3 @@ From Coq import List.
  Proof.
      intros. (* Test*)
  Qed.
- 
