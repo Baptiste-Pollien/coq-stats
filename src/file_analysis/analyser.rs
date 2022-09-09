@@ -1,3 +1,4 @@
+use crate::lexer::token;
 use crate::lexer::{self, token::Token};
 use crate::file_analysis::stats_file::StatsFile;
 
@@ -53,35 +54,34 @@ impl Analyser{
         }
     }
 
-    fn analyse_fst_token(&mut self, token: Token, stats: &mut StatsFile) {
+    /// Function that takes the first token of the line
+    /// and return true if the analyse must be before the 
+    /// analysis of the token
+    fn test_fst_token(token: &Token) -> bool {
         match token {
-            Token::LCOMM => {
-                self.incr_comment();
-                stats.comments += 1;
-            },
             Token::RCOMM => {
-                self.decr_comment();
-                stats.comments += 1;
-            },
+                true
+            }
             _ => {
-                //  Already in the stats
-                match self.state {
-                    State::COMMENT(_) => {
-                        stats.comments += 1;
-                    }
-                    State::CODE => {
-                        stats.code += 1;
-                    }
-                    State::PROOF => {
-                        //TODO 
-                    }
-                }
-            },
+                false
+            }
         }
-
     }
 
-    
+    // Analyse the current state and update the stats
+    fn analyse_state(&mut self, stats: &mut StatsFile) {
+        match self.state {
+            State::COMMENT(_) => {
+                stats.comments += 1;
+            }
+            State::CODE => {
+                stats.code += 1;
+            }
+            State::PROOF => {
+                //TODO 
+            }
+        }
+    }
 
     // Return true if the end of the line or the file is reached
     fn analyse_token(&mut self, token: Token) -> bool {
@@ -104,11 +104,19 @@ impl Analyser{
         res
     }
 
+    /// Analyse a line
     pub fn analyse_line(&mut self,
                              lexer: &mut lexer::Lexer,
                              stats: &mut StatsFile,
                              fst_token: Token) {
-        self.analyse_fst_token(fst_token, stats);
+
+        if Analyser::test_fst_token(&fst_token) {
+            self.analyse_state(stats);
+            self.analyse_token(fst_token);
+        } else {
+            self.analyse_token(fst_token);
+            self.analyse_state(stats);
+        }
 
         while !self.analyse_token(lexer.next_token()){
         }

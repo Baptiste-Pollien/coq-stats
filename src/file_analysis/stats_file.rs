@@ -22,4 +22,20 @@ impl StatsFile {
             coq_stats: StatsCoq::new(),
         }
     }
+
+    pub fn new_tests(file_name: &str, 
+                           lines: u64,
+                           blanks: u64,
+                           code: u64,
+                           comments: u64,
+                           coq_stats: StatsCoq) -> Self{
+        Self {
+            name: String::from(file_name),
+            lines: lines,
+            blanks: blanks,
+            code: code,
+            comments: comments,
+            coq_stats: coq_stats,
+        }
+    }
 }

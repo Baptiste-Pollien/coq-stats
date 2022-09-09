@@ -36,13 +36,16 @@ pub mod file_analysis {
                     break;
                 },
                 Token::END => {
+                    println!("{}", stats.lines);
                     break;
                 },
                 token => {
                     analyser.analyse_line(&mut l, &mut stats, token);
                 },
             }
-            stats.lines += 1;
+            if !l.end() {
+                stats.lines += 1;
+            }
         }
 
         stats

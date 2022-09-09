@@ -48,6 +48,10 @@ impl Lexer {
         }
     }
 
+    pub fn end(&self) -> bool {
+        self.ch == '\0'
+    }
+
 
     pub fn skip_whitespace(&mut self) {
         let mut ch = self.ch;

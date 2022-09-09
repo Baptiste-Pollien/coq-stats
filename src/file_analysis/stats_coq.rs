@@ -1,22 +1,26 @@
 
-
+// TODO : add Next Obligations, Inductive, Record...
 #[derive(Debug)]
 pub struct StatsCoq {
-    props: u64,
-    lemmas: u64,
-    theorems: u64,
-    proofs: u64,
-    admitteds: u64,
-}
+    line_code: u64,
+    line_prop: u64,
+    line_proof: u64,
+    nb_lemma: u64,
+    nb_theorem: u64,
+    nb_proof: u64,
+    nb_admitted: u64,
+} 
 
 impl StatsCoq {
     pub fn new() -> Self {
         Self {
-            props: 0,
-            lemmas: 0,
-            theorems: 0,
-            proofs: 0,
-            admitteds: 0,
+            line_code: 0,
+            line_prop: 0,
+            line_proof: 0,
+            nb_lemma: 0,
+            nb_theorem: 0,
+            nb_proof: 0,
+            nb_admitted: 0,
         }
     }
 }
