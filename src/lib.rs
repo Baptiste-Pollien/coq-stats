@@ -9,11 +9,8 @@ pub fn run_test (res: &StatsFile) {
 
     let stats = analyse_file(file_name);
 
-    assert_eq!(stats.lines, stats.blanks + stats.code + stats.comments);
-    assert_eq!(stats.lines, res.lines);
-    assert_eq!(stats.blanks, res.blanks);
-    assert_eq!(stats.code, res.code);
-    assert_eq!(stats.comments, res.comments);
+    assert_eq!(stats, *res);
+    assert_eq!(stats.lines, stats.blanks + stats.code() + stats.comments);
 }
 
 
@@ -26,32 +23,35 @@ mod tests {
     fn test0 () {
         let cstats =  StatsCoq::new();
         let res 
-            = StatsFile::new_tests("tests/test0.v", 1, 1, 0, 0, cstats);
+            = StatsFile::new_tests("tests/test0.v", 1, 1, 0, cstats);
         run_test(&res);
     }
 
     #[test]
     fn test1 () {
-        let cstats =  StatsCoq::new();
+        let cstats
+            =  StatsCoq::new_test(1, 0, 0, 0, 0, 0);
         let res 
-            = StatsFile::new_tests("tests/test1.v", 1, 0, 1, 0, cstats);
+            = StatsFile::new_tests("tests/test1.v", 1, 0, 0, cstats);
         run_test(&res);
     }
 
 
     #[test]
     fn test2 () {
-        let cstats =  StatsCoq::new();
+        let cstats
+            =  StatsCoq::new_test(7, 3, 1, 0, 1, 0);
         let res 
-            = StatsFile::new_tests("tests/test2.v", 20, 5, 10, 5, cstats);
+            = StatsFile::new_tests("tests/test2.v", 20, 5, 5, cstats);
         run_test(&res);
     }
 
     #[test]
     fn test3 () {
-        let cstats =  StatsCoq::new();
+        let cstats
+            =  StatsCoq::new_test(7, 3, 1, 0, 1, 0);
         let res 
-            = StatsFile::new_tests("tests/test3.v", 19, 4, 10, 5, cstats);
+            = StatsFile::new_tests("tests/test3.v", 19, 4, 5, cstats);
         run_test(&res);
     }
 
@@ -59,15 +59,16 @@ mod tests {
     fn test4 () {
         let cstats =  StatsCoq::new();
         let res 
-            = StatsFile::new_tests("tests/test4.v", 2, 2, 0, 0, cstats);
+            = StatsFile::new_tests("tests/test4.v", 2, 2, 0, cstats);
         run_test(&res);
     }
 
     #[test]
     fn test5 () {
-        let cstats =  StatsCoq::new();
+        let cstats
+            =  StatsCoq::new_test(2, 0, 0, 0, 0, 0);
         let res 
-            = StatsFile::new_tests("tests/test5.v", 2, 0, 2, 0, cstats);
+            = StatsFile::new_tests("tests/test5.v", 2, 0, 0, cstats);
         run_test(&res);
     }
 
