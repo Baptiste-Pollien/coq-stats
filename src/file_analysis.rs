@@ -32,6 +32,10 @@ pub mod file_analysis {
                     stats.blanks += 1;
                 },
                 Token::EOF => {
+                    stats.blanks += 1;
+                    break;
+                },
+                Token::END => {
                     break;
                 },
                 token => {

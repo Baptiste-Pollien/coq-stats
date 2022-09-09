@@ -5,6 +5,7 @@
 pub enum Token {
     ILLEGAL(char),
     EOF,
+    END,
     EOL,
     DOT,
     IDENT(Vec<char>),
@@ -29,7 +30,7 @@ pub enum Token {
     ASTERISK,
     SLASH,
     LT,
-    GT
+    GT,
 }
 
 pub fn get_keyword_token(ident: &Vec<char>) -> Result<Token, String> {

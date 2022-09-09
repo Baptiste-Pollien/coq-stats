@@ -15,7 +15,7 @@ impl StatsFile {
     pub fn new(file_name: &String) -> Self {
         Self {
             name: String::from(file_name),
-            lines: 0,
+            lines: 1,
             blanks: 0,
             code: 0,
             comments: 0,

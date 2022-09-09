@@ -53,6 +53,36 @@ impl Analyser{
         }
     }
 
+    fn analyse_fst_token(&mut self, token: Token, stats: &mut StatsFile) {
+        match token {
+            Token::LCOMM => {
+                self.incr_comment();
+                stats.comments += 1;
+            },
+            Token::RCOMM => {
+                self.decr_comment();
+                stats.comments += 1;
+            },
+            _ => {
+                //  Already in the stats
+                match self.state {
+                    State::COMMENT(_) => {
+                        stats.comments += 1;
+                    }
+                    State::CODE => {
+                        stats.code += 1;
+                    }
+                    State::PROOF => {
+                        //TODO 
+                    }
+                }
+            },
+        }
+
+    }
+
+    
+
     // Return true if the end of the line or the file is reached
     fn analyse_token(&mut self, token: Token) -> bool {
         let mut res = false;
@@ -61,7 +91,10 @@ impl Analyser{
             Token::LCOMM => {
                 self.incr_comment();
             },
-            Token::EOF | Token::EOL => {
+            Token::RCOMM => {
+                self.decr_comment();
+            },
+            Token::EOF | Token::EOL | Token::END => {
                 res = true;
             },
             _ => {
@@ -75,24 +108,10 @@ impl Analyser{
                              lexer: &mut lexer::Lexer,
                              stats: &mut StatsFile,
                              fst_token: Token) {
-        // Analysis of the first token
-        self.analyse_token(fst_token);
+        self.analyse_fst_token(fst_token, stats);
 
-        match self.state {
-            State::COMMENT(_) => {
-                stats.comments += 1;
-            }
-            State::CODE => {
-                stats.code += 1;
-            }
-            State::PROOF => {
-
-            }
+        while !self.analyse_token(lexer.next_token()){
         }
-
-        while self.analyse_token(lexer.next_token()){
-
-        }
-
     }
+
 }

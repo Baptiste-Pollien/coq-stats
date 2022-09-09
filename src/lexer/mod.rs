@@ -29,8 +29,10 @@ impl Lexer {
     }
 
     pub fn read_char(&mut self) {
-        if self.read_position >= self.input.len() {
+        if self.read_position == self.input.len() {
             self.ch = '0';
+        } else if self.read_position > self.input.len() {
+            self.ch = '\0';
         } else {
             self.ch = self.input[self.read_position];
         }
@@ -97,7 +99,15 @@ impl Lexer {
                 tok = token::Token::SLASH;
             },
             '*' => {
-                tok = token::Token::ASTERISK;
+                match self.look_ahead() {
+                    ')' => {
+                        self.read_char();
+                        tok = token::Token::RCOMM;
+                    },
+                    _ => {
+                        tok = token::Token::ASTERISK;
+                    }
+                }
             },
             '<' => {
                 tok = token::Token::LT;
@@ -120,15 +130,7 @@ impl Lexer {
                 }
             },
             ')' => {
-                match self.look_ahead() {
-                    '*' => {
-                        self.read_char();
-                        tok = token::Token::RCOMM;
-                    },
-                    _ => {
-                        tok = token::Token::RPAREN;
-                    }
-                }
+               tok = token::Token::RPAREN;
             },
             ',' => {
                 tok = token::Token::COMMA;
@@ -141,6 +143,9 @@ impl Lexer {
             },
             '0' => {
                 tok = token::Token::EOF;
+            },
+            '\0' => {
+                tok = token::Token::END;
             }
             _ => {
                 if is_letter(self.ch) {
