@@ -2,6 +2,7 @@ mod file_analysis;
 pub mod lexer;
 
 use crate::file_analysis::file_analysis::analyse_file;
+use crate::file_analysis::file_analysis::analyse_folder;
 use std::env;
 
 fn main() {
@@ -11,7 +12,7 @@ fn main() {
 
     let file_path = String::from(&args[1]);
 
-    let stats = analyse_file(file_path);
+    let stats = analyse_folder(file_path);
 
     println!("{:?}", stats);
 

@@ -1,4 +1,6 @@
 use crate::file_analysis::stats_coq::StatsCoq;
+use std::ops::Add;
+use std::ops::AddAssign;
 
 #[derive(Debug, PartialEq)]
 pub struct StatsFile {
@@ -13,7 +15,7 @@ impl StatsFile {
     pub fn new(file_name: &String) -> Self {
         Self {
             name: String::from(file_name),
-            lines: 1,
+            lines: 0,
             blanks: 0,
             comments: 0,
             coq_stats: StatsCoq::new(),
@@ -35,6 +37,32 @@ impl StatsFile {
             blanks: blanks,
             comments: comments,
             coq_stats: coq_stats,
+        }
+    }
+}
+
+impl<'a, 'b> Add<&'b StatsFile> for &'a StatsFile {
+    type Output = StatsFile;
+
+    fn add(self, other: &'b StatsFile) -> StatsFile {
+        StatsFile {
+            name: String::from(&self.name),
+            lines: self.lines + other.lines,
+            blanks: self.blanks + other.blanks,
+            comments: self.comments + other.comments,
+            coq_stats: &self.coq_stats + &other.coq_stats,
+        }
+    }
+}
+
+impl AddAssign for StatsFile {
+    fn add_assign(&mut self, other: StatsFile) {
+        *self = StatsFile {
+            name: String::from(&self.name),
+            lines: self.lines + other.lines,
+            blanks: self.blanks + other.blanks,
+            comments: self.comments + other.comments,
+            coq_stats: &self.coq_stats + &other.coq_stats,
         }
     }
 }

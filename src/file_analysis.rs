@@ -9,14 +9,15 @@ pub mod file_analysis {
     use crate::file_analysis::stats_file::StatsFile;
     use crate::file_analysis::analyser::Analyser;
 
-
-
     /// Produce the statistic about the file [file_name]
     pub fn analyse_file(file_name: String) -> StatsFile {
         let mut stats = StatsFile::new(&file_name);
 
+        // Count the first line
+        stats.lines += 1;
+
         let contenu = fs::read_to_string(file_name)
-            .expect("Quelque chose s'est mal passé lors de la lecture du fichier");
+            .expect("Cannot read the file");
 
         let mut l
             = lexer::Lexer::new(contenu.chars().collect());
@@ -36,7 +37,6 @@ pub mod file_analysis {
                     break;
                 },
                 Token::END => {
-                    println!("{}", stats.lines);
                     break;
                 },
                 token => {
@@ -49,5 +49,18 @@ pub mod file_analysis {
         }
 
         stats
+    }
+
+    pub fn analyse_folder(path_folder: String) -> StatsFile {
+        let mut stats_folder  = StatsFile::new(&path_folder);
+
+        let paths = fs::read_dir(path_folder).unwrap();
+
+        for path in paths {
+            let path = path.unwrap().path().display().to_string();
+            stats_folder += analyse_file(path.to_string());
+        }
+
+        stats_folder
     }
 }

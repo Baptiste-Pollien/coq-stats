@@ -1,3 +1,4 @@
+use std::ops::Add;
 
 // TODO : add Next Obligations, Inductive, Record...
 #[derive(Debug, PartialEq)]
@@ -35,6 +36,21 @@ impl StatsCoq {
             nb_theorem: nb_theorem,
             nb_proof: nb_proof,
             nb_admitted: nb_admitted,
+        }
+    }
+}
+
+impl<'a, 'b> Add<&'b StatsCoq> for &'a StatsCoq {
+    type Output = StatsCoq;
+
+    fn add(self, other: &'b StatsCoq) -> StatsCoq {
+        StatsCoq {
+            line_code: self.line_code + other.line_code,
+            line_proof: self.line_proof + other.line_proof,
+            nb_lemma: self.nb_lemma + other.nb_lemma,
+            nb_theorem: self.nb_theorem + other.nb_theorem,
+            nb_proof: self.nb_proof + other.nb_proof,
+            nb_admitted: self.nb_admitted + other.nb_admitted,
         }
     }
 }
