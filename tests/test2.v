@@ -3,7 +3,7 @@ From Coq import List.
 (** Multi line comments 
  (* comments inside *)
     Corinductive Ltac
-    Module Section
+    Module Section. Admitted. Qed.
  *)
 
  Definition test := 1.

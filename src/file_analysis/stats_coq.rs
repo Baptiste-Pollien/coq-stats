@@ -1,6 +1,6 @@
 use std::ops::Add;
 
-// TODO : add Next Obligations, Inductive, Record...
+
 #[derive(Debug, PartialEq)]
 pub struct StatsCoq {
     pub line_code: u64,
