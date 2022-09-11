@@ -34,12 +34,13 @@ pub fn new_tab_stats_file() -> Table {
 pub fn new_tab_coq_information() -> Table {
     let mut table = new_tab();
 
-    table.set_titles(row!["Code",
-                                "Line Proof",
-                                "Lemma",
-                                "Theorem",
-                                "Proof",
-                                "Admitted"]);
+    table.set_titles(row!["Path",
+                               "Code",
+                               "Line Proof",
+                               "Lemma",
+                               "Theorem",
+                               "Proof",
+                               "Admitted"]);
 
     table
 }

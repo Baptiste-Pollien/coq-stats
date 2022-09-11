@@ -8,7 +8,7 @@ use crate::file_analysis::stats_file::StatsFile;
 pub fn run_test (res: &StatsFile) {
     let file_name = String::from(&res.name);
 
-    if let Some(stats) = analyse_file(file_name) {
+    if let Some(stats) = analyse_file(&file_name) {
         assert_eq!(stats, *res);
         assert_eq!(stats.lines, stats.blanks + stats.code() + stats.comments);
     } else {
@@ -19,7 +19,7 @@ pub fn run_test (res: &StatsFile) {
 pub fn run_test_folder (res: &StatsFile) {
     let file_name = String::from(&res.name);
 
-    let stats = analyse_folder(file_name);
+    let stats = analyse_folder(&file_name);
 
     assert_eq!(stats, *res);
     assert_eq!(stats.lines, stats.blanks + stats.code() + stats.comments);

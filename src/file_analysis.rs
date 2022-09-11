@@ -31,7 +31,7 @@ pub mod file_analysis {
     use super::{is_folder, is_coq_file};
 
     /// Produce the statistic about the file [file_name]
-    pub fn analyse_file(file_name: String) -> Option<StatsFile> {
+    pub fn analyse_file(file_name: &String) -> Option<StatsFile> {
         // Test if its a coq file
         if !is_coq_file(&file_name) {
             return None
@@ -80,7 +80,7 @@ pub mod file_analysis {
         Some(stats)
     }
 
-    pub fn analyse_folder(path_folder: String) -> StatsFile {
+    pub fn analyse_folder(path_folder: &String) -> StatsFile {
         let mut stats_folder  = StatsFile::new(&path_folder);
 
         let paths = fs::read_dir(path_folder)
@@ -93,10 +93,10 @@ pub mod file_analysis {
             let path = path.unwrap().path().display().to_string();
 
             if is_folder(&path) {
-                stats_folder += analyse_folder(path);
+                stats_folder += analyse_folder(&path);
             }
             else {
-                if let Some(stats) = analyse_file(path) {
+                if let Some(stats) = analyse_file(&path) {
                 stats_folder += stats;
                 }
             }

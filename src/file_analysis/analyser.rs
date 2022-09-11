@@ -6,6 +6,7 @@ pub enum State {
     COMMENT(u64),
     CODE,
     PROOF,
+    NEXTOBLIGATION,
 }
 
 pub struct Analyser {
@@ -26,10 +27,22 @@ impl Analyser{
     fn is_comment_state (&self) -> bool {
         match self.state {
             State::COMMENT(_) => {
-                false
+                true
             }
             _ => {
+                false
+            }
+        }
+    }
+
+    /// Return true is the analyser is in a NEXT_OBLIGATION state
+    fn is_next_state (&self) -> bool {
+        match self.state {
+            State::NEXTOBLIGATION => {
                 true
+            }
+            _ => {
+                false
             }
         }
     }
@@ -90,7 +103,7 @@ impl Analyser{
             State::CODE => {
                 stats.coq_stats.line_code += 1;
             }
-            State::PROOF => {
+            State::PROOF | State::NEXTOBLIGATION  => {
                 stats.coq_stats.line_proof += 1;
             }
         }
@@ -117,8 +130,24 @@ impl Analyser{
                 stats.coq_stats.nb_admitted += 1;
                 self.state = State::CODE;
             },
+            Token::NEXT => {
+                self.previous_state = self.state;
+                self.state = State::NEXTOBLIGATION;
+            },
             _ => {
 
+            }
+        }
+    }
+
+    /// Analysis of the token is the NEXT_OBLIGATION stae
+    fn analyse_token_next(&mut self, token: Token) {
+        match token {
+            Token::OBLIGATION => {
+                self.state = State::PROOF;
+            }
+            _ => {
+                self.state = self.previous_state;
             }
         }
     }
@@ -139,7 +168,9 @@ impl Analyser{
                 res = true;
             },
             _ => {
-                if self.is_comment_state() {
+                if self.is_next_state() {
+                    self.analyse_token_next(token);
+                } else if !self.is_comment_state() {
                     self.analyse_token_coq(token, stats);
                 }
             },

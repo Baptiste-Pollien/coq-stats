@@ -25,6 +25,8 @@ pub enum Token {
     PROOF,
     ADMITTED,
     QED,
+    NEXT,
+    OBLIGATION,
     MINUS,
     BANG,
     ASTERISK,
@@ -41,6 +43,8 @@ pub fn get_keyword_token(ident: &Vec<char>) -> Result<Token, String> {
         "Proof." => Ok(Token::PROOF),
         "Admitted." => Ok(Token::ADMITTED),
         "Qed." => Ok(Token::QED),
+        "Next" => Ok(Token::NEXT),
+        "Obligation." => Ok(Token::OBLIGATION),
         _ => Err(String::from("Not a keyword"))
     }
 }

@@ -41,8 +41,9 @@ impl StatsCoq {
     }
 
     // Add the information in the table
-    pub fn table_info(&self, table: &mut Table) {
-        table.add_row(row![self.line_code,
+    pub fn table_info(&self, path: &String, table: &mut Table) {
+        table.add_row(row![path,
+                                   self.line_code,
                                    self.line_proof,
                                    self.nb_lemma,
                                    self.nb_theorem,
