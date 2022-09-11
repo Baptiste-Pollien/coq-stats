@@ -85,12 +85,12 @@ mod tests {
     }
 
     #[test]
-    fn test_folder () {
+    fn test6 () {
         let cstats
-            =  StatsCoq::new_test(18, 6, 2, 0, 2, 0);
+            =  StatsCoq::new_test(7, 3, 1, 0, 1, 0);
         let res 
-            = StatsFile::new_tests("tests/", 46, 12, 10, cstats);
-        run_test_folder(&res);
+            = StatsFile::new_tests("tests/test6.v", 19, 4, 5, cstats);
+        run_test(&res);
     }
 
 }

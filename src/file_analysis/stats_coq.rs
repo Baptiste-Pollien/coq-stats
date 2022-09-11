@@ -1,5 +1,6 @@
 use std::ops::Add;
 
+use prettytable::{Table, row};
 
 #[derive(Debug, PartialEq)]
 pub struct StatsCoq {
@@ -37,6 +38,16 @@ impl StatsCoq {
             nb_proof: nb_proof,
             nb_admitted: nb_admitted,
         }
+    }
+
+    // Add the information in the table
+    pub fn table_info(&self, table: &mut Table) {
+        table.add_row(row![self.line_code,
+                                   self.line_proof,
+                                   self.nb_lemma,
+                                   self.nb_theorem,
+                                   self.nb_proof,
+                                   self.nb_admitted]);
     }
 }
 

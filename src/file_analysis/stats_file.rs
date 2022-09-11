@@ -2,6 +2,8 @@ use crate::file_analysis::stats_coq::StatsCoq;
 use std::ops::Add;
 use std::ops::AddAssign;
 
+use prettytable::{Table, row};
+
 #[derive(Debug, PartialEq)]
 pub struct StatsFile {
     pub name: String,
@@ -38,6 +40,14 @@ impl StatsFile {
             comments: comments,
             coq_stats: coq_stats,
         }
+    }
+
+    pub fn table_info(&self, table: &mut Table) {
+        table.add_row(row![self.name,
+                                  self.lines,
+                                 self.code(),
+                                 self.comments,
+                                 self.comments]);
     }
 }
 
