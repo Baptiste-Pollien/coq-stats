@@ -42,7 +42,7 @@ mod tests {
     #[test]
     fn test1 () {
         let cstats
-            =  StatsCoq::new_test(1, 0, 0, 0, 0, 0);
+            =  StatsCoq::new_test(1, 0,  0, 0, 0, 0, 0);
         let res 
             = StatsFile::new_tests("tests/test1.v", 1, 0, 0, cstats);
         run_test(&res);
@@ -52,7 +52,7 @@ mod tests {
     #[test]
     fn test2 () {
         let cstats
-            =  StatsCoq::new_test(7, 3, 1, 0, 1, 0);
+            =  StatsCoq::new_test(5, 2, 3, 1, 0, 1, 0);
         let res 
             = StatsFile::new_tests("tests/test2.v", 20, 5, 5, cstats);
         run_test(&res);
@@ -61,7 +61,7 @@ mod tests {
     #[test]
     fn test3 () {
         let cstats
-            =  StatsCoq::new_test(7, 3, 1, 0, 1, 0);
+            =  StatsCoq::new_test(5, 2, 3, 1, 0, 1, 0);
         let res 
             = StatsFile::new_tests("tests/test3.v", 19, 4, 5, cstats);
         run_test(&res);
@@ -78,7 +78,7 @@ mod tests {
     #[test]
     fn test5 () {
         let cstats
-            =  StatsCoq::new_test(2, 0, 0, 0, 0, 0);
+            =  StatsCoq::new_test(2, 0, 0, 0, 0, 0, 0);
         let res 
             = StatsFile::new_tests("tests/test5.v", 2, 0, 0, cstats);
         run_test(&res);
@@ -87,7 +87,7 @@ mod tests {
     #[test]
     fn test6 () {
         let cstats
-            =  StatsCoq::new_test(7, 3, 1, 0, 1, 0);
+            =  StatsCoq::new_test(5, 2, 3, 1, 0, 1, 0);
         let res 
             = StatsFile::new_tests("tests/test6.v", 19, 4, 5, cstats);
         run_test(&res);

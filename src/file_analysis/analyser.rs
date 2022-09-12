@@ -5,6 +5,7 @@ use crate::file_analysis::stats_file::StatsFile;
 pub enum State {
     COMMENT(u64),
     CODE,
+    PROPOSITION,
     PROOF,
     NEXTOBLIGATION,
 }
@@ -103,6 +104,9 @@ impl Analyser{
             State::CODE => {
                 stats.coq_stats.line_code += 1;
             }
+            State::PROPOSITION => {
+                stats.coq_stats.line_proposition += 1;
+            }
             State::PROOF | State::NEXTOBLIGATION  => {
                 stats.coq_stats.line_proof += 1;
             }
@@ -115,9 +119,11 @@ impl Analyser{
         match token {
             Token::LEMMA => {
                 stats.coq_stats.nb_lemma += 1;
+                self.state = State::PROPOSITION;
             },
             Token::THEOREM => {
                 stats.coq_stats.nb_theorem += 1;
+                self.state = State::PROPOSITION;
             },
             Token::PROOF => {
                 self.state = State::PROOF

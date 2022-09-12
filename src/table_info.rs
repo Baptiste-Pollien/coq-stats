@@ -36,6 +36,7 @@ pub fn new_tab_coq_information() -> Table {
 
     table.set_titles(row!["Path",
                                "Code",
+                               "Line Lemma/TH",
                                "Line Proof",
                                "Lemma",
                                "Theorem",

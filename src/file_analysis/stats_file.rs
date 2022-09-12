@@ -25,7 +25,9 @@ impl StatsFile {
     }
 
     pub fn code(&self) -> u64 {
-        self.coq_stats.line_code + self.coq_stats.line_proof
+        self.coq_stats.line_code
+            + self.coq_stats.line_proposition
+            + self.coq_stats.line_proof
     }
 
     pub fn new_tests(file_name: &str, 
