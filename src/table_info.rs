@@ -36,12 +36,12 @@ pub fn new_tab_coq_information() -> Table {
 
     table.set_titles(row!["Path",
                                "Code",
-                               "Line Lemma/TH",
-                               "Line Proof",
-                               "Lemma",
-                               "Theorem",
-                               "Proof",
-                               "Admitted"]);
+                               "Lines Lemma/TH",
+                               "Lines Proof",
+                               "Nb Lemma",
+                               "Nb Theorem",
+                               "Nb Proof",
+                               "Nb Admitted"]);
 
     table
 }

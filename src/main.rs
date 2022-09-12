@@ -1,6 +1,7 @@
 /// External modules
 #[macro_use] extern crate prettytable;
-use std::{env, fs};
+use std::{fs, path::PathBuf};
+use clap::Parser;
 
 /// Modules 
 mod file_analysis;
@@ -12,6 +13,20 @@ use crate::file_analysis::{
                 is_folder,
                 stats_file::StatsFile,
 };
+
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Output file
+    #[clap(short, long, parse(from_os_str))]
+    output: Option<PathBuf>,
+
+    /// Files to process
+    #[clap(name = "FILE", parse(from_os_str), required = true)]
+    files: Vec<PathBuf>,
+}
+
 
 fn analyse_files_in_folder(path_folder: &String) {
     let mut table_info = table_info::new_tab_stats_file();
@@ -49,6 +64,7 @@ fn analyse_files_in_folder(path_folder: &String) {
     table_coq_info.printstd();
 }
 
+
 fn analyse_one_file(path: String) {
     let stats = analyse_file(&path).unwrap();
 
@@ -62,15 +78,16 @@ fn analyse_one_file(path: String) {
 }
 
 
+fn main() { 
+    let args = Args::parse();
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let file_path = String::from(&args[1]);
+    for path in args.files {
+        let file_path  = path.into_os_string().into_string().unwrap();
 
     if is_folder(&file_path) {
         analyse_files_in_folder(&file_path);
     } else {
         analyse_one_file(file_path);
     };
+    }
 }

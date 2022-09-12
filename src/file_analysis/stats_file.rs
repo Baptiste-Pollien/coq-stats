@@ -49,7 +49,7 @@ impl StatsFile {
                                   self.lines,
                                  self.code(),
                                  self.comments,
-                                 self.comments]);
+                                 self.blanks]);
     }
 }
 
