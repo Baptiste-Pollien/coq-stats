@@ -35,4 +35,4 @@ cargo run [FILE]
 Where `FILE` is the path to a file or a folder.
 
 **Note**: This program analyse only Coq file. To analyse other type of file
-you can use [tokei](https://github.com/XAMPPRocky/tokei)
+you can use [tokei](https://github.com/XAMPPRocky/tokei).
