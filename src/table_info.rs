@@ -35,7 +35,7 @@ pub fn new_tab_coq_information() -> Table {
     let mut table = new_tab();
 
     table.set_titles(row!["Path",
-                               "Code",
+                               "Lines Code",
                                "Lines Lemma/TH",
                                "Lines Proof",
                                "Nb Lemma",
