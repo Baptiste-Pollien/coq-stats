@@ -1,6 +1,6 @@
-# Coq Stats Project
+# Coq'Stats
 
-Program to get stats about Coq projects.
+Coq'Stats is a program to get statistics about Coq projects.
 
 ```
 +------------------+-------+------+----------+--------+

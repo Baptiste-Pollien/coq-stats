@@ -83,7 +83,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "coq-stats-project"
+name = "coq-stats"
 version = "0.1.0"
 dependencies = [
  "clap",
