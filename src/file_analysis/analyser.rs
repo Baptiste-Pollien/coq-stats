@@ -1,5 +1,5 @@
-use crate::lexer::{self, token::Token};
 use crate::file_analysis::stats_file::StatsFile;
+use crate::lexer::{self, token::Token};
 
 #[derive(Copy, Clone, PartialEq)]
 pub enum State {
@@ -15,8 +15,7 @@ pub struct Analyser {
     previous_state: State,
 }
 
-impl Analyser{
-
+impl Analyser {
     pub fn new() -> Self {
         Self {
             state: State::CODE,
@@ -25,26 +24,18 @@ impl Analyser{
     }
 
     /// Return true is the analyser is in a COMMENT state
-    fn is_comment_state (&self) -> bool {
+    fn is_comment_state(&self) -> bool {
         match self.state {
-            State::COMMENT(_) => {
-                true
-            }
-            _ => {
-                false
-            }
+            State::COMMENT(_) => true,
+            _ => false,
         }
     }
 
     /// Return true is the analyser is in a NEXT_OBLIGATION state
-    fn is_next_state (&self) -> bool {
+    fn is_next_state(&self) -> bool {
         match self.state {
-            State::NEXTOBLIGATION => {
-                true
-            }
-            _ => {
-                false
-            }
+            State::NEXTOBLIGATION => true,
+            _ => false,
         }
     }
 
@@ -53,11 +44,11 @@ impl Analyser{
         match self.state {
             State::COMMENT(i) => {
                 self.state = State::COMMENT(i + 1);
-            },
+            }
             state => {
                 self.previous_state = state;
                 self.state = State::COMMENT(1);
-            },
+            }
         }
     }
 
@@ -67,31 +58,24 @@ impl Analyser{
             State::COMMENT(i) => {
                 if i <= 1 {
                     self.state = self.previous_state;
-                }
-                else {
+                } else {
                     self.state = State::COMMENT(i - 1);
                 }
-            },
+            }
             state => {
                 self.previous_state = state;
                 self.state = State::COMMENT(1);
-            },
+            }
         }
     }
 
     /// Function that takes the first token of the line
-    /// and return true if the analyse must be before the 
+    /// and return true if the analyse must be before the
     /// analysis of the token
     fn test_fst_token(token: &Token) -> bool {
         match token {
-            Token::RCOMM 
-            | Token::QED 
-            | Token::ADMITTED=> {
-                true
-            }
-            _ => {
-                false
-            }
+            Token::RCOMM | Token::QED | Token::ADMITTED => true,
+            _ => false,
         }
     }
 
@@ -107,7 +91,7 @@ impl Analyser{
             State::PROPOSITION => {
                 stats.coq_stats.line_proposition += 1;
             }
-            State::PROOF | State::NEXTOBLIGATION  => {
+            State::PROOF | State::NEXTOBLIGATION => {
                 stats.coq_stats.line_proof += 1;
             }
         }
@@ -120,29 +104,25 @@ impl Analyser{
             Token::LEMMA => {
                 stats.coq_stats.nb_lemma += 1;
                 self.state = State::PROPOSITION;
-            },
+            }
             Token::THEOREM => {
                 stats.coq_stats.nb_theorem += 1;
                 self.state = State::PROPOSITION;
-            },
-            Token::PROOF => {
-                self.state = State::PROOF
-            },
+            }
+            Token::PROOF => self.state = State::PROOF,
             Token::QED => {
                 stats.coq_stats.nb_proof += 1;
                 self.state = State::CODE;
-            },
+            }
             Token::ADMITTED => {
                 stats.coq_stats.nb_admitted += 1;
                 self.state = State::CODE;
-            },
+            }
             Token::NEXT => {
                 self.previous_state = self.state;
                 self.state = State::NEXTOBLIGATION;
-            },
-            _ => {
-
             }
+            _ => {}
         }
     }
 
@@ -159,37 +139,37 @@ impl Analyser{
     }
 
     /// Return true if the end of the line or the file is reached
-    fn analyse_token(&mut self, token: Token, stats: &mut StatsFile)
-                                                                -> bool {
+    fn analyse_token(&mut self, token: Token, stats: &mut StatsFile) -> bool {
         let mut res = false;
 
         match token {
             Token::LCOMM => {
                 self.incr_comment();
-            },
+            }
             Token::RCOMM => {
                 self.decr_comment();
-            },
+            }
             Token::EOF | Token::EOL | Token::END => {
                 res = true;
-            },
+            }
             _ => {
                 if self.is_next_state() {
                     self.analyse_token_next(token);
                 } else if !self.is_comment_state() {
                     self.analyse_token_coq(token, stats);
                 }
-            },
+            }
         }
         res
     }
 
     /// Analyse a line
-    pub fn analyse_line(&mut self,
-                             lexer: &mut lexer::Lexer,
-                             stats: &mut StatsFile,
-                             fst_token: Token) {
-
+    pub fn analyse_line(
+        &mut self,
+        lexer: &mut lexer::Lexer,
+        stats: &mut StatsFile,
+        fst_token: Token,
+    ) {
         if Analyser::test_fst_token(&fst_token) {
             self.analyse_state(stats);
             self.analyse_token(fst_token, stats);
@@ -198,8 +178,6 @@ impl Analyser{
             self.analyse_state(stats);
         }
 
-        while !self.analyse_token(lexer.next_token(), stats){
-        }
+        while !self.analyse_token(lexer.next_token(), stats) {}
     }
-
 }

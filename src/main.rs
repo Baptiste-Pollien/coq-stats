@@ -1,19 +1,16 @@
-/// External modules
-use std::{path::PathBuf};
 use clap::Parser;
+/// External modules
+use std::{path::PathBuf, process::exit};
 
-/// Modules 
-mod table_info;
-mod system;
-mod lexer;
 pub mod file_analysis;
+mod lexer;
+mod system;
+/// Modules
+mod table_info;
 
-use crate::file_analysis::{
-    file_analysis::{analyse_files_in_folder, analyse_one_file},
-};
+use crate::file_analysis::file_analysis::{analyse_files_in_folder, analyse_one_file};
 
 use crate::system::system::is_folder;
-
 
 /// Command line arguments
 #[derive(Parser, Debug)]
@@ -28,13 +25,14 @@ struct Args {
     files: Vec<PathBuf>,
 }
 
-fn main() { 
+fn main() {
     let args = Args::parse();
 
     for path in args.files {
-        let file_path  = path.into_os_string()
-                                          .into_string()
-                                          .unwrap();
+        let file_path = path.into_os_string().into_string().unwrap_or_else(|e| {
+            println!("Error when getting path: {:?}", e);
+            exit(0);
+        });
 
         if is_folder(&file_path) {
             analyse_files_in_folder(&file_path);

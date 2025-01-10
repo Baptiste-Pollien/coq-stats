@@ -1,6 +1,6 @@
 use std::ops::Add;
 
-use prettytable::{Table, row};
+use prettytable::{row, Table};
 
 #[derive(Debug, PartialEq)]
 pub struct StatsCoq {
@@ -11,7 +11,7 @@ pub struct StatsCoq {
     pub nb_theorem: u64,
     pub nb_proof: u64,
     pub nb_admitted: u64,
-} 
+}
 
 impl StatsCoq {
     pub fn new() -> Self {
@@ -26,13 +26,15 @@ impl StatsCoq {
         }
     }
 
-    pub fn new_test(line_code: u64, 
-                          line_proposition: u64,
-                          line_proof: u64,
-                          nb_lemma: u64,
-                          nb_theorem: u64,
-                          nb_proof: u64,
-                          nb_admitted: u64,) -> Self {
+    pub fn new_test(
+        line_code: u64,
+        line_proposition: u64,
+        line_proof: u64,
+        nb_lemma: u64,
+        nb_theorem: u64,
+        nb_proof: u64,
+        nb_admitted: u64,
+    ) -> Self {
         Self {
             line_code: line_code,
             line_proposition: line_proposition,
@@ -46,14 +48,16 @@ impl StatsCoq {
 
     // Add the information in the table
     pub fn table_info(&self, path: &String, table: &mut Table) {
-        table.add_row(row![path,
-                                   self.line_code,
-                                   self.line_proposition,
-                                   self.line_proof,
-                                   self.nb_lemma,
-                                   self.nb_theorem,
-                                   self.nb_proof,
-                                   self.nb_admitted]);
+        table.add_row(row![
+            path,
+            self.line_code,
+            self.line_proposition,
+            self.line_proof,
+            self.nb_lemma,
+            self.nb_theorem,
+            self.nb_proof,
+            self.nb_admitted
+        ]);
     }
 }
 

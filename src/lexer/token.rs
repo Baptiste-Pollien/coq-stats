@@ -1,7 +1,4 @@
-
-
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub enum Token {
     ILLEGAL(char),
     EOF,
@@ -45,6 +42,6 @@ pub fn get_keyword_token(ident: &Vec<char>) -> Result<Token, String> {
         "Qed." => Ok(Token::QED),
         "Next" => Ok(Token::NEXT),
         "Obligation." => Ok(Token::OBLIGATION),
-        _ => Err(String::from("Not a keyword"))
+        _ => Err(String::from("Not a keyword")),
     }
 }

@@ -2,7 +2,7 @@ use crate::file_analysis::stats_coq::StatsCoq;
 use std::ops::Add;
 use std::ops::AddAssign;
 
-use prettytable::{Table, row};
+use prettytable::{row, Table};
 
 #[derive(Debug, PartialEq)]
 pub struct StatsFile {
@@ -25,16 +25,16 @@ impl StatsFile {
     }
 
     pub fn code(&self) -> u64 {
-        self.coq_stats.line_code
-            + self.coq_stats.line_proposition
-            + self.coq_stats.line_proof
+        self.coq_stats.line_code + self.coq_stats.line_proposition + self.coq_stats.line_proof
     }
 
-    pub fn new_tests(file_name: &str, 
-                           lines: u64,
-                           blanks: u64,
-                           comments: u64,
-                           coq_stats: StatsCoq) -> Self{
+    pub fn new_tests(
+        file_name: &str,
+        lines: u64,
+        blanks: u64,
+        comments: u64,
+        coq_stats: StatsCoq,
+    ) -> Self {
         Self {
             name: String::from(file_name),
             lines: lines,
@@ -45,11 +45,13 @@ impl StatsFile {
     }
 
     pub fn table_info(&self, table: &mut Table) {
-        table.add_row(row![self.name,
-                                  self.lines,
-                                 self.code(),
-                                 self.comments,
-                                 self.blanks]);
+        table.add_row(row![
+            self.name,
+            self.lines,
+            self.code(),
+            self.comments,
+            self.blanks
+        ]);
     }
 }
 
