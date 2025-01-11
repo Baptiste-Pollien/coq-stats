@@ -13,6 +13,12 @@ pub struct StatsCoq {
     pub nb_admitted: u64,
 }
 
+impl Default for StatsCoq {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl StatsCoq {
     pub fn new() -> Self {
         Self {
@@ -36,13 +42,13 @@ impl StatsCoq {
         nb_admitted: u64,
     ) -> Self {
         Self {
-            line_code: line_code,
-            line_proposition: line_proposition,
-            line_proof: line_proof,
-            nb_lemma: nb_lemma,
-            nb_theorem: nb_theorem,
-            nb_proof: nb_proof,
-            nb_admitted: nb_admitted,
+            line_code,
+            line_proposition,
+            line_proof,
+            nb_lemma,
+            nb_theorem,
+            nb_proof,
+            nb_admitted,
         }
     }
 
@@ -61,7 +67,7 @@ impl StatsCoq {
     }
 }
 
-impl<'a, 'b> Add<&'b StatsCoq> for &'a StatsCoq {
+impl<'b> Add<&'b StatsCoq> for &StatsCoq {
     type Output = StatsCoq;
 
     fn add(self, other: &'b StatsCoq) -> StatsCoq {

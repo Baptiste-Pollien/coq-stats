@@ -4,7 +4,7 @@ mod lexer;
 mod system;
 mod table_info;
 
-use crate::file_analysis::{file_analysis::analyse_file, stats_file::StatsFile};
+use crate::file_analysis::{analyse_file, stats_file::StatsFile};
 
 /// Function to test the file analysis
 pub fn run_test(res: &StatsFile) {
@@ -14,7 +14,7 @@ pub fn run_test(res: &StatsFile) {
         assert_eq!(stats, *res);
         assert_eq!(stats.lines, stats.blanks + stats.code() + stats.comments);
     } else {
-        assert!(false);
+        unreachable!();
     }
 }
 

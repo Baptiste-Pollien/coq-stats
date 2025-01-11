@@ -37,10 +37,10 @@ impl StatsFile {
     ) -> Self {
         Self {
             name: String::from(file_name),
-            lines: lines,
-            blanks: blanks,
-            comments: comments,
-            coq_stats: coq_stats,
+            lines,
+            blanks,
+            comments,
+            coq_stats,
         }
     }
 
@@ -55,7 +55,7 @@ impl StatsFile {
     }
 }
 
-impl<'a, 'b> Add<&'b StatsFile> for &'a StatsFile {
+impl<'b> Add<&'b StatsFile> for &StatsFile {
     type Output = StatsFile;
 
     fn add(self, other: &'b StatsFile) -> StatsFile {

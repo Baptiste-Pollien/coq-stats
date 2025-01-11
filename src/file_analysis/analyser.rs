@@ -15,6 +15,12 @@ pub struct Analyser {
     previous_state: State,
 }
 
+impl Default for Analyser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Analyser {
     pub fn new() -> Self {
         Self {
@@ -25,18 +31,12 @@ impl Analyser {
 
     /// Return true is the analyser is in a COMMENT state
     fn is_comment_state(&self) -> bool {
-        match self.state {
-            State::COMMENT(_) => true,
-            _ => false,
-        }
+        matches!(self.state, State::COMMENT(_))
     }
 
     /// Return true is the analyser is in a NEXT_OBLIGATION state
     fn is_next_state(&self) -> bool {
-        match self.state {
-            State::NEXTOBLIGATION => true,
-            _ => false,
-        }
+        matches!(self.state, State::NEXTOBLIGATION)
     }
 
     // Increment the inner comment
@@ -73,10 +73,7 @@ impl Analyser {
     /// and return true if the analyse must be before the
     /// analysis of the token
     fn test_fst_token(token: &Token) -> bool {
-        match token {
-            Token::RCOMM | Token::QED | Token::ADMITTED => true,
-            _ => false,
-        }
+        matches!(token, Token::Rcomm | Token::Qed | Token::Admitted)
     }
 
     // Analyse the current state and update the stats
@@ -101,24 +98,24 @@ impl Analyser {
     /// called in the COMMENT state.
     fn analyse_token_coq(&mut self, token: Token, stats: &mut StatsFile) {
         match token {
-            Token::LEMMA => {
+            Token::Lemma => {
                 stats.coq_stats.nb_lemma += 1;
                 self.state = State::PROPOSITION;
             }
-            Token::THEOREM => {
+            Token::Theorem => {
                 stats.coq_stats.nb_theorem += 1;
                 self.state = State::PROPOSITION;
             }
-            Token::PROOF => self.state = State::PROOF,
-            Token::QED => {
+            Token::Proof => self.state = State::PROOF,
+            Token::Qed => {
                 stats.coq_stats.nb_proof += 1;
                 self.state = State::CODE;
             }
-            Token::ADMITTED => {
+            Token::Admitted => {
                 stats.coq_stats.nb_admitted += 1;
                 self.state = State::CODE;
             }
-            Token::NEXT => {
+            Token::Next => {
                 self.previous_state = self.state;
                 self.state = State::NEXTOBLIGATION;
             }
@@ -129,7 +126,7 @@ impl Analyser {
     /// Analysis of the token is the NEXT_OBLIGATION stae
     fn analyse_token_next(&mut self, token: Token) {
         match token {
-            Token::OBLIGATION => {
+            Token::Obligation => {
                 self.state = State::PROOF;
             }
             _ => {
@@ -143,13 +140,13 @@ impl Analyser {
         let mut res = false;
 
         match token {
-            Token::LCOMM => {
+            Token::Lcomm => {
                 self.incr_comment();
             }
-            Token::RCOMM => {
+            Token::Rcomm => {
                 self.decr_comment();
             }
-            Token::EOF | Token::EOL | Token::END => {
+            Token::Eof | Token::Eol | Token::End => {
                 res = true;
             }
             _ => {

@@ -1,6 +1,9 @@
+//! Module based on the code found in
+//! https://github.com/mohitk05/monkey-rust
+
+use std::cmp::Ordering;
+
 pub mod token;
-/// Module based on the code found in
-/// https://github.com/mohitk05/monkey-rust
 
 pub struct Lexer {
     input: Vec<char>,
@@ -10,17 +13,17 @@ pub struct Lexer {
 }
 
 fn is_letter(ch: char) -> bool {
-    'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || ch == '.'
+    ch.is_ascii_lowercase() || ch.is_ascii_uppercase() || ch == '_' || ch == '.'
 }
 
 fn is_digit(ch: char) -> bool {
-    '0' <= ch && ch <= '9'
+    ch.is_ascii_digit()
 }
 
 impl Lexer {
     pub fn new(input: Vec<char>) -> Self {
         Self {
-            input: input,
+            input,
             position: 0,
             read_position: 0,
             ch: '0',
@@ -28,15 +31,19 @@ impl Lexer {
     }
 
     pub fn read_char(&mut self) {
-        if self.read_position == self.input.len() {
-            self.ch = '0';
-        } else if self.read_position > self.input.len() {
-            self.ch = '\0';
-        } else {
-            self.ch = self.input[self.read_position];
+        match self.read_position.cmp(&self.input.len()) {
+            Ordering::Equal => {
+                self.ch = '0';
+            }
+            Ordering::Greater => {
+                self.ch = '\0';
+            }
+            _ => {
+                self.ch = self.input[self.read_position];
+            }
         }
         self.position = self.read_position;
-        self.read_position = self.read_position + 1;
+        self.read_position += 1;
     }
 
     pub fn look_ahead(&mut self) -> char {
@@ -79,67 +86,67 @@ impl Lexer {
         let tok: token::Token;
         self.skip_whitespace();
         match self.ch {
-            '\n' => tok = token::Token::EOL,
-            '.' => tok = token::Token::DOT,
+            '\n' => tok = token::Token::Eol,
+            '.' => tok = token::Token::Dot,
             '=' => {
-                tok = token::Token::ASSIGN;
+                tok = token::Token::Assign;
             }
             '+' => {
-                tok = token::Token::PLUS;
+                tok = token::Token::Plus;
             }
             '-' => {
-                tok = token::Token::MINUS;
+                tok = token::Token::Minus;
             }
             '!' => {
-                tok = token::Token::BANG;
+                tok = token::Token::Bang;
             }
             '/' => {
-                tok = token::Token::SLASH;
+                tok = token::Token::Slash;
             }
             '*' => match self.look_ahead() {
                 ')' => {
                     self.read_char();
-                    tok = token::Token::RCOMM;
+                    tok = token::Token::Rcomm;
                 }
                 _ => {
-                    tok = token::Token::ASTERISK;
+                    tok = token::Token::Asterisk;
                 }
             },
             '<' => {
-                tok = token::Token::LT;
+                tok = token::Token::Lt;
             }
             '>' => {
-                tok = token::Token::GT;
+                tok = token::Token::Gt;
             }
             ';' => {
-                tok = token::Token::SEMICOLON;
+                tok = token::Token::Semicolon;
             }
             '(' => match self.look_ahead() {
                 '*' => {
                     self.read_char();
-                    tok = token::Token::LCOMM;
+                    tok = token::Token::Lcomm;
                 }
                 _ => {
-                    tok = token::Token::LPAREN;
+                    tok = token::Token::Lparen;
                 }
             },
             ')' => {
-                tok = token::Token::RPAREN;
+                tok = token::Token::Rparen;
             }
             ',' => {
-                tok = token::Token::COMMA;
+                tok = token::Token::Comma;
             }
             '{' => {
-                tok = token::Token::LBRACE;
+                tok = token::Token::Lbrace;
             }
             '}' => {
-                tok = token::Token::RBRACE;
+                tok = token::Token::Rbrace;
             }
             '0' => {
-                tok = token::Token::EOF;
+                tok = token::Token::Eof;
             }
             '\0' => {
-                tok = token::Token::END;
+                tok = token::Token::End;
             }
             _ => {
                 if is_letter(self.ch) {
@@ -149,14 +156,14 @@ impl Lexer {
                             return keywork_token;
                         }
                         Err(_err) => {
-                            return token::Token::IDENT(ident);
+                            return token::Token::Ident(ident);
                         }
                     }
                 } else if is_digit(self.ch) {
                     let ident: Vec<char> = read_number(self);
-                    return token::Token::INT(ident);
+                    return token::Token::Int(ident);
                 } else {
-                    tok = token::Token::ILLEGAL(self.ch);
+                    tok = token::Token::Illegal(self.ch);
                 }
             }
         }

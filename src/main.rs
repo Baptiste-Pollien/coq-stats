@@ -8,18 +8,14 @@ mod system;
 /// Modules
 mod table_info;
 
-use crate::file_analysis::file_analysis::{analyse_files_in_folder, analyse_one_file};
+use crate::file_analysis::{analyse_files_in_folder, analyse_one_file};
 
-use crate::system::system::is_folder;
+use crate::system::is_folder;
 
 /// Command line arguments
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Output file
-    /// #[clap(short, long, parse(from_os_str))]
-    /// output: Option<PathBuf>,
-
     /// Files to process
     #[clap(name = "FILE", parse(from_os_str), required = true)]
     files: Vec<PathBuf>,
