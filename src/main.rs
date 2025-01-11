@@ -17,7 +17,7 @@ use crate::system::is_folder;
 #[clap(author, version, about, long_about = None)]
 struct Args {
     /// Files to process
-    #[clap(name = "FILE", parse(from_os_str), required = true)]
+    #[clap(name = "FILE", required = true)]
     files: Vec<PathBuf>,
 }
 
